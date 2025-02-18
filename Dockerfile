@@ -27,3 +27,6 @@ RUN composer install --no-dev --no-interaction --prefer-dist
 
 # Set permissions for storage and bootstrap/cache
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+
+# Start PHP-FPM (or remove if not needed)
+CMD ["php-fpm"]
