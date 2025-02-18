@@ -22,14 +22,14 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Copy existing application directory
 COPY . .
 
-# Set file permissions for storage and bootstrap/cache (to avoid permission issues)
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
-
-# Install PHP dependencies (This step is important after copying your code)
+# Install PHP dependencies
 RUN composer install --no-dev --no-interaction --prefer-dist
 
-# Expose the port PHP-FPM listens on
-EXPOSE 9000
+# Set permissions
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+
+# Expose the port Laravel runs on
+EXPOSE 8080  # Railway typically uses port 8080 for HTTP traffic
 
 # Start PHP-FPM
 CMD ["php-fpm"]
