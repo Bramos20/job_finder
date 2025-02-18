@@ -29,7 +29,7 @@ RUN composer install --no-dev --no-interaction --prefer-dist
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
 # Expose the port Laravel runs on
-EXPOSE 8080  # Railway typically uses port 8080 for HTTP traffic
+EXPOSE 8080
 
 # Start PHP-FPM
 CMD ["php-fpm"]
