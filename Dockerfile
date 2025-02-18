@@ -22,13 +22,13 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Copy existing application directory
 COPY . .
 
-# Install PHP dependencies
-RUN composer install --no-dev --no-interaction --prefer-dist
-
-# Set permissions
+# Set file permissions for storage and bootstrap/cache (to avoid permission issues)
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
-# Expose the port Laravel runs on
+# Install PHP dependencies (This step is important after copying your code)
+RUN composer install --no-dev --no-interaction --prefer-dist
+
+# Expose the port PHP-FPM listens on
 EXPOSE 9000
 
 # Start PHP-FPM
