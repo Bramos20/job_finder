@@ -28,5 +28,8 @@ RUN composer install --no-dev --no-interaction --prefer-dist
 # Set permissions
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
+# Expose the port Laravel runs on
+EXPOSE 9000
+
 # Start PHP-FPM (default entry point for PHP-FPM)
 CMD ["php-fpm"]
