@@ -1,5 +1,5 @@
 # Use an official PHP runtime as a parent image
-FROM php:8.2-fpm
+FROM php:8.2-cli
 
 # Set working directory
 WORKDIR /var/www
@@ -19,17 +19,14 @@ RUN apt-get update && apt-get install -y \
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copy existing application directory
+# Copy the application directory
 COPY . .
 
 # Install PHP dependencies
 RUN composer install --no-dev --no-interaction --prefer-dist
 
-# Set permissions
+# Set permissions for storage and bootstrap/cache
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
-# Expose the port Laravel runs on
-EXPOSE 8080
-
-# Start PHP-FPM
-CMD ["php-fpm"]
+# Run the Laravel application using the built-in PHP server (no need for PHP-FPM)
+CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]
