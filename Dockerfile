@@ -1,5 +1,5 @@
 # Use an official PHP runtime as a parent image
-FROM php:8.2-cli
+FROM php:8.2-fpm
 
 # Set working directory
 WORKDIR /var/www
@@ -19,14 +19,14 @@ RUN apt-get update && apt-get install -y \
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copy the application directory
+# Copy existing application directory
 COPY . .
 
 # Install PHP dependencies
 RUN composer install --no-dev --no-interaction --prefer-dist
 
-# Set permissions for storage and bootstrap/cache
+# Set permissions
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
-# Start PHP-FPM (or remove if not needed)
+# Start PHP-FPM (default entry point for PHP-FPM)
 CMD ["php-fpm"]
