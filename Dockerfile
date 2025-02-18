@@ -27,6 +27,3 @@ RUN composer install --no-dev --no-interaction --prefer-dist
 
 # Set permissions for storage and bootstrap/cache
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
-
-# Run the Laravel application using the built-in PHP server (no need for PHP-FPM)
-CMD ["php", "-S", "0.0.0.0:8080", "-t", "public"]
