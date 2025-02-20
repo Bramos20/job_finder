@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
     libfreetype6-dev \
+    nginx \
     && docker-php-ext-install pdo pdo_mysql mbstring gd
 
 # Install Composer
@@ -28,8 +29,11 @@ RUN composer install --no-dev --no-interaction --prefer-dist
 # Set permissions
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
-# Expose the port Laravel runs on
-EXPOSE 9000
+# Copy Nginx configuration
+COPY nginx.conf /etc/nginx/nginx.conf
 
-# Start PHP-FPM (default entry point for PHP-FPM)
-CMD ["php-fpm"]
+# Expose ports (80 for HTTP, 9000 for PHP-FPM)
+EXPOSE 80 9000
+
+# Start Nginx and PHP-FPM together
+CMD service nginx start && php-fpm
