@@ -1,10 +1,10 @@
-# Use PHP-FPM with Alpine for a smaller image
+# Use PHP with Alpine as base image
 FROM php:8.2-fpm-alpine
 
 # Set working directory
 WORKDIR /var/www
 
-# Install dependencies
+# Install system dependencies
 RUN apk add --no-cache \
     curl \
     zip \
@@ -15,24 +15,14 @@ RUN apk add --no-cache \
     freetype-dev \
     autoconf \
     g++ \
-    make && \
-    docker-php-ext-configure gd --with-freetype --with-jpeg && \
-    docker-php-ext-install pdo pdo_mysql mbstring gd
-    
-# Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+    make
 
-# Copy existing application directory
-COPY . .
+# Install PHP extensions
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install pdo pdo_mysql mbstring gd
 
-# Install PHP dependencies
-RUN composer install --no-dev --no-interaction --prefer-dist
-
-# Ensure correct permissions
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
-
-# Expose Railway’s expected port (9000)
+# Expose the port Railway uses
 EXPOSE 9000
 
-# Start PHP-FPM
+# Start the PHP process (only if necessary)
 CMD ["php-fpm"]
