@@ -15,7 +15,8 @@ RUN apk add --no-cache \
     freetype-dev \
     autoconf \
     g++ \
-    make
+    make \
+    oniguruma-dev  # ✅ Fix for missing Oniguruma library
 
 # Install PHP extensions
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
@@ -24,5 +25,5 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
 # Expose the port Railway uses
 EXPOSE 9000
 
-# Start the PHP process (only if necessary)
+# Start PHP-FPM (only if necessary)
 CMD ["php-fpm"]
