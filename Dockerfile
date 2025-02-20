@@ -12,11 +12,13 @@ RUN apk add --no-cache \
     git \
     libpng-dev \
     libjpeg-turbo-dev \
-    freetype-dev && \   # ✅ Correct package name
+    freetype-dev \
+    autoconf \
+    g++ \
+    make && \
     docker-php-ext-configure gd --with-freetype --with-jpeg && \
     docker-php-ext-install pdo pdo_mysql mbstring gd
-
-
+    
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
